@@ -1,11 +1,14 @@
 export default function About() {
     return (
-        <section className="py-12 flex flex-col items-center text-center">
-            <p className="text-xl text-earth-hunter dark:text-earth-khaki leading-relaxed max-w-prose">
-                I am a developer starting my journey into the world of web development.
-                I love building things and solving problems. This website is my playground
-                where I experiment with new technologies like React and Next.js.
-            </p>
+        <section className="py-8 flex flex-col items-center text-center">
+            <div className="glass p-8 rounded-2xl max-w-2xl mx-auto">
+                <p className="text-earth-cream leading-relaxed max-w-none text-left">
+                    I am a developer starting my journey into the world of web development.
+                    I love <span className="font-medium">building things</span> and solving problems.
+                    This website is my playground where I experiment with new technologies like
+                    <span className="font-medium"> React</span> and <span className="font-medium">Next.js</span>.
+                </p>
+            </div>
         </section>
     );
 }

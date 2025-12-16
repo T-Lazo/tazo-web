@@ -1,13 +1,25 @@
+"use client";
+
+import { motion } from "framer-motion";
+
 export default function Hero() {
     return (
-        <section className="flex flex-col items-center text-center justify-center pt-24 pb-6 md:pt-32 md:pb-8">
-            <h1 className="text-5xl font-extrabold tracking-tight text-foreground sm:text-7xl">
-                Hey, I'm TJ.
-            </h1>
-            {/* <p className="mt-6 text-lg text-earth-hunter dark:text-earth-khaki max-w-2xl">
-                I'm building my personal website to learn React and Next.js.
-                Welcome to my corner of the internet.
-            </p> */}
+        <section className="flex flex-col items-center text-center justify-center pt-32 pb-12 md:pt-48 md:pb-16 relative z-10">
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, ease: "easeOut" }}
+            >
+                <span className="block text-earth-medium text-lg md:text-xl font-medium mb-4 tracking-widest uppercase">
+                    My Portfolio
+                </span>
+                <h1 className="text-6xl md:text-8xl font-serif font-bold tracking-tight text-earth-cream mb-6">
+                    Hey, I'm TJ.
+                </h1>
+                <p className="text-lg md:text-xl text-earth-medium max-w-2xl mx-auto leading-relaxed">
+                    I hope you're having a good day ◡̈
+                </p>
+            </motion.div>
         </section>
     );
 }
