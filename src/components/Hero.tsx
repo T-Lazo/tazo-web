@@ -11,13 +11,13 @@ export default function Hero() {
                 transition={{ duration: 0.8, ease: "easeOut" }}
             >
                 <span className="block text-earth-medium text-lg md:text-xl font-medium mb-4 tracking-widest uppercase">
-                    My Portfolio
+                    ◡̈
                 </span>
                 <h1 className="text-6xl md:text-8xl font-serif font-bold tracking-tight text-earth-cream mb-6">
                     Hey, I'm TJ.
                 </h1>
                 <p className="text-lg md:text-xl text-earth-medium max-w-2xl mx-auto leading-relaxed">
-                    I hope you're having a good day ◡̈
+                    Welcome to my portfolio!
                 </p>
             </motion.div>
         </section>

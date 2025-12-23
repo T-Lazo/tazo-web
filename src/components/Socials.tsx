@@ -1,11 +1,9 @@
-import { Github, Linkedin, Instagram, Mail } from "lucide-react";
+import { Github, Linkedin } from "lucide-react";
 
 export default function Socials() {
     const socials = [
-        { icon: Instagram, label: "Instagram", href: "https://instagram.com/tjlazo_", color: "hover:text-pink-400" },
-        { icon: Github, label: "GitHub", href: "https://github.com", color: "hover:text-white" },
-        { icon: Linkedin, label: "LinkedIn", href: "https://linkedin.com", color: "hover:text-blue-400" },
-        { icon: Mail, label: "Email", href: "mailto:hello@example.com", color: "hover:text-yellow-400" },
+        { icon: Github, label: "GitHub", href: "https://github.com/T-Lazo", color: "hover:text-white" },
+        { icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/in/timothy-josh-lazo-11435434b/", color: "hover:text-blue-400" },
     ];
 
     return (
