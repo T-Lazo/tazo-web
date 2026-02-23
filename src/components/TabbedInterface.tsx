@@ -16,7 +16,7 @@ export default function TabbedInterface() {
     ] as const;
 
     return (
-        <div className="w-full max-w-4xl relative z-10">
+        <div className="w-full max-w-[1200px] relative z-10 px-4 md:px-8">
             {/* Tabs Header */}
             <div className="flex justify-center mb-12">
                 <div className="glass rounded-full p-1.5 flex items-center space-x-1">
@@ -25,14 +25,14 @@ export default function TabbedInterface() {
                             key={tab.id}
                             onClick={() => setActiveTab(tab.id)}
                             className={`relative px-6 py-2 rounded-full text-sm font-medium transition-colors duration-200 outline-none focus-visible:ring-2 focus-visible:ring-earth-medium ${activeTab === tab.id
-                                ? "text-earth-deep"
+                                ? "text-white"
                                 : "text-earth-medium hover:text-earth-light"
                                 }`}
                         >
                             {activeTab === tab.id && (
                                 <motion.div
                                     layoutId="activeTab"
-                                    className="absolute inset-0 bg-earth-cream rounded-full mix-blend-normal"
+                                    className="absolute inset-0 bg-chocolate rounded-full mix-blend-normal"
                                     transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                                 />
                             )}
