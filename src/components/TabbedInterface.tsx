@@ -16,7 +16,7 @@ export default function TabbedInterface() {
     ] as const;
 
     return (
-        <div className="w-full max-w-[1200px] relative z-10 px-4 md:px-8">
+        <div className="w-full max-w-4xl relative z-10 px-4 md:px-8">
             {/* Tabs Header */}
             <div className="flex justify-center mb-12">
                 <div className="glass rounded-full p-1.5 flex items-center space-x-1">
