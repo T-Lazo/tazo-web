@@ -18,7 +18,9 @@
   1. User sees the #152E24 background and theme colors (beige, white, chocolate) applied consistently.
   2. User observes glassmorphism effects (backdrop-blur and subtle borders) on the main tabbed interface.
   3. Site maintains a high-performance responsive layout on desktop and mobile.
-**Plans**: TBD
+**Plans**: 2 plans
+- [ ] 01-01-PLAN.md — Refine @theme and colors.
+- [ ] 01-02-PLAN.md — Implement glassmorphism and layout core.
 
 ### Phase 2: Professional Content
 **Goal**: Populate the portfolio with accurate professional data.
@@ -61,7 +63,7 @@
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1: Visual Identity & Foundation | 0/0 | Not started | - |
+| 1: Visual Identity & Foundation | 0/2 | Not started | - |
 | 2: Professional Content | 0/0 | Not started | - |
 | 3: Personality & Memories | 0/0 | Not started | - |
 | 4: Motion & Interaction | 0/0 | Not started | - |
