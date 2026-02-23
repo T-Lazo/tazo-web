@@ -1,12 +1,16 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* Slightly brighter deep green, keeping the forest feel */
+  /* Primary Foundation */
   --color-earth-deep: #152E24;
+  --color-beige: #DCD7C9;
+  --color-chocolate: #A27B5C;
+  --color-white: #FFFFFF;
+
+  /* Neutrals & Shades */
   --color-earth-hunter: #2C3A2E;
   --color-earth-dark: #3A4A3B;
   --color-earth-medium: #8C9985;
-  /* Lighter pitch green for subheaders */
   --color-earth-sage: #B4C5B9;
   --color-earth-light: #E8E6DE;
   --color-earth-cream: #F5F2EA;
@@ -21,14 +25,7 @@
 
 :root {
   --background: var(--color-earth-deep);
-  --foreground: var(--color-earth-cream);
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    --background: var(--color-earth-cream);
-    --foreground: var(--color-earth-deep);
-  }
+  --foreground: var(--color-white);
 }
 
 body {
@@ -44,6 +41,7 @@ h4,
 h5,
 h6 {
   font-family: var(--font-serif);
+  color: var(--color-white);
 }
 
 .noise {
@@ -56,13 +54,4 @@ h6 {
   z-index: 50;
   opacity: 0.04;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-}
-
-.glass {
-  /* Enhanced glass effect */
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
