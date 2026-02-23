@@ -20,24 +20,24 @@ export default function Projects() {
 
     return (
         <section className="py-2">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {projects.map((project, index) => (
                     <div
                         key={index}
-                        className="glass rounded-xl p-6 transition-all duration-300 hover:bg-white/5 group"
+                        className="glass rounded-2xl p-8 transition-all duration-300 hover:bg-white/5 group"
                     >
                         <div className="flex justify-between items-start mb-4">
-                            <h3 className="text-xl font-bold font-serif text-earth-cream group-hover:text-white transition-colors">
+                            <h3 className="text-2xl font-bold font-serif text-white group-hover:text-beige transition-colors">
                                 {project.title}
                             </h3>
                             {project.type === "active" && (
-                                <ExternalLink className="w-5 h-5 text-earth-sage group-hover:text-earth-cream transition-colors" />
+                                <ExternalLink className="w-6 h-6 text-chocolate group-hover:text-white transition-colors" />
                             )}
                         </div>
-                        <p className="text-earth-sage mb-6 leading-relaxed">
+                        <p className="text-beige mb-6 leading-relaxed">
                             {project.description}
                         </p>
-                        <div className="inline-block px-3 py-1 rounded-full text-xs font-medium bg-earth-hunter/50 text-earth-light border border-earth-medium/20">
+                        <div className="inline-block px-4 py-1.5 rounded-full text-sm font-medium bg-chocolate/20 text-beige border border-chocolate/30">
                             {project.status}
                         </div>
                     </div>

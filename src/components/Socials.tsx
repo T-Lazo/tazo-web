@@ -7,19 +7,19 @@ export default function Socials() {
     ];
 
     return (
-        <section className="py-6 flex flex-col items-center">
-            <p className="text-earth-sage mb-8 text-lg">Connect with me</p>
-            <div className="flex gap-6">
+        <section className="py-12 flex flex-col items-center">
+            <p className="text-beige/60 mb-8 text-lg font-medium tracking-wide">Connect with me</p>
+            <div className="flex gap-8">
                 {socials.map((social, index) => (
                     <a
                         key={index}
                         href={social.href}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className={`p-4 glass rounded-full transition-all duration-300 hover:scale-110 group ${social.color}`}
+                        className={`p-5 glass rounded-full transition-all duration-500 hover:scale-110 group border border-white/5 hover:border-chocolate/50 ${social.color}`}
                         aria-label={social.label}
                     >
-                        <social.icon className="w-6 h-6 text-earth-light transition-colors" />
+                        <social.icon className="w-7 h-7 text-beige transition-colors group-hover:text-chocolate" />
                     </a>
                 ))}
             </div>

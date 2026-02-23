@@ -17,7 +17,7 @@ export default function Hero() {
                     Hey, I'm TJ.
                 </h1>
                 <p className="text-lg md:text-xl text-earth-medium max-w-2xl mx-auto leading-relaxed">
-                    Welcome to my portfolio!
+                    Welcome to my portfolio! 
                 </p>
             </motion.div>
         </section>
