@@ -30,16 +30,16 @@
 
 | REQ-ID | Phase | Status |
 |--------|-------|--------|
-| DESIGN-01 | — | Pending |
-| DESIGN-02 | — | Pending |
-| DESIGN-03 | — | Pending |
-| DESIGN-04 | — | Pending |
-| CONTENT-01 | — | Pending |
-| CONTENT-02 | — | Pending |
-| CONTENT-03 | — | Pending |
-| CONTENT-04 | — | Pending |
-| TECH-01 | — | Pending |
-| TECH-02 | — | Pending |
+| DESIGN-01 | Phase 1 | Pending |
+| DESIGN-02 | Phase 1 | Pending |
+| DESIGN-03 | Phase 4 | Pending |
+| DESIGN-04 | Phase 4 | Pending |
+| CONTENT-01 | Phase 2 | Pending |
+| CONTENT-02 | Phase 2 | Pending |
+| CONTENT-03 | Phase 3 | Pending |
+| CONTENT-04 | Phase 3 | Pending |
+| TECH-01 | Phase 1 | Pending |
+| TECH-02 | Phase 5 | Pending |
 
 ---
 *Last updated: Mon Feb 23 2026 after initialization*
