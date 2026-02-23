@@ -44,6 +44,14 @@ h6 {
   color: var(--color-white);
 }
 
+.glass {
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  background: rgba(220, 215, 201, 0.08);
+  border: 1px solid rgba(220, 215, 201, 0.12);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+}
+
 .noise {
   position: fixed;
   top: 0;
