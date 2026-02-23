@@ -7,17 +7,17 @@
 
 ## Current Position
 
-**Phase**: 2 - Professional Content — IN PROGRESS
-**Current Plan**: 02-01 COMPLETE, 02-02 next
-**Status**: EXECUTING
-**Progress**: [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 20% phases (1/5), Phase 2: 1/2 plans done
+**Phase**: 2 - Professional Content — COMPLETE
+**Current Plan**: 02-02 COMPLETE, Phase 2 done
+**Status**: READY FOR PHASE 3
+**Progress**: [▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓▓] 40% phases (2/5), Phase 2: 2/2 plans done
 
 ## Performance Metrics
 
-- **Requirement Coverage**: 11/10+ (CONTENT-01 now complete)
+- **Requirement Coverage**: CONTENT-01 complete, CONTENT-02 complete
 - **Phase 1 Completion**: 100% (3/3 plans + UAT)
-- **Phase 2 Completion**: 50% (1/2 plans)
-- **Total v1 Completion**: ~25%
+- **Phase 2 Completion**: 100% (2/2 plans)
+- **Total v1 Completion**: ~40%
 
 ## Accumulated Context
 
@@ -31,12 +31,14 @@
 - **Timeline pattern**: border-l-2 border-chocolate/40 + pl-6 + absolute -left-[29px] dot with border-[#152E24] cutout effect.
 - **Content constants**: Typed static arrays at top of component file for all static copy.
 - **Animations deferred**: About.tsx stays Server Component, no Framer Motion until Phase 4.
+- **Projects cards**: No icon imports, no external link field — only title, description, tags[], status per project.
+- **Tag pill sizing**: text-xs/px-2.5 py-0.5 for tags vs text-sm/px-4 py-1.5 for status badge — tags are supplementary, badge is primary callout.
 
 ### Todos
 - [x] Initialize Phase 1 plan
 - [x] Complete layout gap closure (01-03)
 - [x] Rewrite About.tsx with professional content (02-01)
-- [ ] Rewrite Projects tab with Pi-hole and portfolio cards (02-02)
+- [x] Rewrite Projects tab with Pi-hole and portfolio cards (02-02)
 
 ### Blockers
 - None
@@ -44,7 +46,7 @@
 ## Session Continuity
 
 ### Last Session
-- 2026-02-23: Executed 02-01-PLAN.md. Rewrote About.tsx with three stacked glass cards and verbatim CV content. Build passes, CONTENT-01 complete.
+- 2026-02-23: Executed 02-02-PLAN.md. Updated Projects.tsx with Pi-hole and Portfolio Site cards, typed data array, tech tag pills, and removed placeholder entry. Human checkpoint approved on both About and Projects tabs. CONTENT-02 complete. Phase 2 done.
 
 ### Next Steps
-- Execute 02-02-PLAN.md: Projects tab with Pi-hole and portfolio site cards.
+- Execute Phase 3: Personality & Memories (Interests and Memories/Attended sections with image overlay support).

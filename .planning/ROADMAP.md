@@ -3,7 +3,7 @@
 ## Phases
 
 - [x] **Phase 1: Visual Identity & Foundation** - Establish the "Earth Deep" aesthetic and glassmorphism foundations using Tailwind CSS v4. (In Progress: Gap closure) (completed 2026-02-23)
-- [ ] **Phase 2: Professional Content** - Integrate professional data (Experience, Education, Projects) from TJ_Lazo_CV.md.
+- [x] **Phase 2: Professional Content** - Integrate professional data (Experience, Education, Projects) from TJ_Lazo_CV.md. (completed 2026-02-23)
 - [ ] **Phase 3: Personality & Memories** - Implement Interests and "Memories" sections with image overlay support.
 - [ ] **Phase 4: Motion & Interaction** - Enhance the user experience with entrance and scroll-reveal animations using Framer Motion 12.
 - [ ] **Phase 5: Performance & Polish** - Optimize assets and visual effects for production readiness and mobile performance.
@@ -30,7 +30,9 @@
 **Success Criteria**:
   1. User can read TJ Lazo's detailed professional history and education in the "About" section.
   2. User can view specific project names, descriptions, and technologies in the "Projects" section.
-**Plans**: TBD
+**Plans**: 2 plans
+- [x] 02-01-PLAN.md — Rewrite About.tsx with professional bio, skill tags, experience timeline, education timeline.
+- [x] 02-02-PLAN.md — Update Projects.tsx with Pi-hole and Portfolio Site cards, tech tag pills.
 
 ### Phase 3: Personality & Memories
 **Goal**: Add sections that reflect TJ's unique identity and experiences.
@@ -65,7 +67,7 @@
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1: Visual Identity & Foundation | 2/3 | In Progress | - |
-| 2: Professional Content | 0/0 | Not started | - |
+| 2: Professional Content | 2/2 | Complete | 2026-02-23 |
 | 3: Personality & Memories | 0/0 | Not started | - |
 | 4: Motion & Interaction | 0/0 | Not started | - |
 | 5: Performance & Polish | 0/0 | Not started | - |
