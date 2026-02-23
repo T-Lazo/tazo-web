@@ -9,7 +9,7 @@
 - [ ] **DESIGN-04**: Implement scroll-reveal animations for page sections to create an engaging flow.
 
 ### Content (CONTENT)
-- [ ] **CONTENT-01**: Refine the "About" section using professional data from TJ_Lazo_CV.md (Experience, Education).
+- [x] **CONTENT-01**: Refine the "About" section using professional data from TJ_Lazo_CV.md (Experience, Education).
 - [ ] **CONTENT-02**: Update the "Projects" section with specific project details and technologies from the CV.
 - [ ] **CONTENT-03**: Create a "Interests" section showcasing Soccer and Video Editing.
 - [ ] **CONTENT-04**: Create a "Memories/Attended" section (e.g., HackUPC) with support for image overlays.
@@ -34,7 +34,7 @@
 | DESIGN-02 | Phase 1 | ✓ |
 | DESIGN-03 | Phase 4 | Pending |
 | DESIGN-04 | Phase 4 | Pending |
-| CONTENT-01 | Phase 2 | Pending |
+| CONTENT-01 | Phase 2 | Complete |
 | CONTENT-02 | Phase 2 | Pending |
 | CONTENT-03 | Phase 3 | Pending |
 | CONTENT-04 | Phase 3 | Pending |
