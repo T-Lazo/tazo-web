@@ -3,8 +3,8 @@
 ## v1 Requirements
 
 ### Design & Aesthetic (DESIGN)
-- [ ] **DESIGN-01**: Implement "Earth Deep" color scheme with #152E24 background and beige/white/chocolate accents.
-- [ ] **DESIGN-02**: Apply subtle glassmorphism (backdrop-blur, subtle borders) to the TabbedInterface and content containers.
+- [x] **DESIGN-01**: Implement "Earth Deep" color scheme with #152E24 background and beige/white/chocolate accents.
+- [x] **DESIGN-02**: Apply subtle glassmorphism (backdrop-blur, subtle borders) to the TabbedInterface and content containers.
 - [ ] **DESIGN-03**: Implement entrance animations (staggered fade-in) for tab content using Framer Motion 12.
 - [ ] **DESIGN-04**: Implement scroll-reveal animations for page sections to create an engaging flow.
 
@@ -15,7 +15,7 @@
 - [ ] **CONTENT-04**: Create a "Memories/Attended" section (e.g., HackUPC) with support for image overlays.
 
 ### Technical (TECH)
-- [ ] **TECH-01**: Maintain a high-performance, responsive single-page experience using Next.js 16 and Tailwind CSS v4.
+- [x] **TECH-01**: Maintain a high-performance, responsive single-page experience using Next.js 16 and Tailwind CSS v4.
 - [ ] **TECH-02**: Optimize image assets and glassmorphism blurs for mobile performance.
 
 ## v2 Requirements (Deferred)
@@ -30,15 +30,15 @@
 
 | REQ-ID | Phase | Status |
 |--------|-------|--------|
-| DESIGN-01 | Phase 1 | Pending |
-| DESIGN-02 | Phase 1 | Pending |
+| DESIGN-01 | Phase 1 | ✓ |
+| DESIGN-02 | Phase 1 | ✓ |
 | DESIGN-03 | Phase 4 | Pending |
 | DESIGN-04 | Phase 4 | Pending |
 | CONTENT-01 | Phase 2 | Pending |
 | CONTENT-02 | Phase 2 | Pending |
 | CONTENT-03 | Phase 3 | Pending |
 | CONTENT-04 | Phase 3 | Pending |
-| TECH-01 | Phase 1 | Pending |
+| TECH-01 | Phase 1 | ✓ |
 | TECH-02 | Phase 5 | Pending |
 
 ---
