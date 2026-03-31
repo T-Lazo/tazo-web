@@ -1,7 +1,6 @@
 # Tazo's Website
 
 My personal website built with [Next.js](https://nextjs.org) and Tailwind CSS.
-Features a custom Earth Tone design system.
 
 ## Running Locally
 
