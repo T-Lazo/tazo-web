@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { useState, useEffect } from "react";
 
 const ShaderGradientCanvas = dynamic(
@@ -34,14 +34,17 @@ export default function Hero() {
     "breaking hardware",
     "reading docs I'll forget",
     "studying",
-    "procrastinating study",
-    "playing video games",
-    "working out",
-    "playing football",
+    "procrastinating",
     "doomscrolling",
   ];
 
   const [index, setIndex] = useState(0);
+
+  const rawX = useMotionValue(-1000);
+  const rawY = useMotionValue(-1000);
+  const glowX = useSpring(rawX, { stiffness: 1500, damping: 25, mass: 0.3 }); //more stiffness = less lag, more damping = more lag
+  const glowY = useSpring(rawY, { stiffness: 1500, damping: 25, mass: 0.3 });
+  const [glowVisible, setGlowVisible] = useState(false);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -51,10 +54,36 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative w-full h-screen flex items-center justify-center overflow-hidden">
+    <section
+      className="relative w-full h-screen flex items-center justify-center overflow-hidden"
+      onMouseMove={(e) => {
+        const rect = e.currentTarget.getBoundingClientRect();
+        rawX.set(e.clientX - rect.left - 130);
+        rawY.set(e.clientY - rect.top - 130);
+      }}
+      onMouseEnter={() => setGlowVisible(true)}
+      onMouseLeave={() => setGlowVisible(false)}
+    >
+
+      {/* Cursor glow — clipped to hero by overflow-hidden */}
+      <motion.div
+        className="absolute z-[15] rounded-full pointer-events-none"
+        style={{
+          top: 0,
+          left: 0,
+          width: 260,
+          height: 260,
+          x: glowX,
+          y: glowY,
+          background: "radial-gradient(circle, rgba(120,255,170,0.13) 0%, transparent 65%)",
+          mixBlendMode: "screen",
+          opacity: glowVisible ? 1 : 0,
+          transition: "opacity 0.3s ease",
+        }}
+      />
 
       {/* ShaderGradient — full bleed background */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 pointer-events-none">
         <ShaderGradientCanvas style={{ width: "100%", height: "100%" }}>
           <ShaderGradient
             type="waterPlane"
@@ -129,6 +158,9 @@ export default function Hero() {
           </AnimatePresence>
         </motion.div>
       </motion.div>
+
+      {/* Bottom fade into solid section */}
+      <div className="absolute bottom-0 left-0 right-0 z-10 h-40 pointer-events-none bg-gradient-to-b from-transparent to-canvas" />
 
       {/* Scroll indicator */}
       <motion.div

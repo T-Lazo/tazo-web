@@ -1,11 +1,13 @@
-const bio = `2nd Year Immersive Software Engineering student at the University of Limerick, recently back from a 6-month internship at Analog Devices. I like to build and design things end to end — software, hardware, and the occasional film. I'm a tinkerer by nature, always looking for something new to learn.`
+const bio = `2nd Year Immersive Software Engineering student at the University of Limerick, recently back from a 6-month internship at 
+Analog Devices. I like building and designing things that are tangible be that software, hardware, cad models or even travel videos.
+I prefer to be a jack of all trades and learn as many things as possible.`
 
 const skills = [
-  "Python", "Java", "C", "Bash",
+  "Python", "Java", "Kotlin", "C", "C++", "Bash", "Supabase",
+  "Flask", "Gunicorn", "React", "TypeScript", "Next.js", "HTML", "CSS",
   "Embedded Linux", "Git", "Docker",
-  "SSH", "Networking", "DNS",
-  "Raspberry Pi", "Technical Docs",
-  "Curious by nature",
+  "SSH", "Raspberry Pi", "Tailscale",
+  "Technical Docs", "micro:bit", "SolidWorks", "Davinci Resolve"
 ]
 
 type TimelineItem = {
@@ -72,7 +74,7 @@ export default function About() {
 
       {/* Skills */}
       <div>
-        <p className="text-xs tracking-[0.2em] uppercase text-accent font-sans mb-5">Skills</p>
+        <p className="text-xs tracking-[0.2em] uppercase text-accent font-sans mb-5">Tools I've Worked With</p>
         <div className="flex flex-wrap gap-2">
           {skills.map((skill) => (
             <span
