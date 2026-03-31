@@ -1,31 +1,24 @@
 @import "tailwindcss";
 
 @theme inline {
-  /* Primary Foundation */
-  --color-earth-deep: #152E24;
-  --color-beige: #DCD7C9;
-  --color-chocolate: #A27B5C;
-  --color-white: #FFFFFF;
-
-  /* Neutrals & Shades */
-  --color-earth-hunter: #2C3A2E;
-  --color-earth-dark: #3A4A3B;
-  --color-earth-medium: #8C9985;
-  --color-earth-sage: #B4C5B9;
-  --color-earth-light: #E8E6DE;
-  --color-earth-cream: #F5F2EA;
+  /* Palette */
+  --color-canvas:  #0D1A14;
+  --color-surface: #141F18;
+  --color-edge:    #1E2E24;
+  --color-accent:  #1D6142;
+  --color-body:    #E8E8E8;
+  --color-dim:     #8A9E93;
+  --color-white:   #FFFFFF;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sans);
   --font-serif: var(--font-serif);
-
-  --animate-fade-in: fade-in 0.5s ease-out forwards;
 }
 
 :root {
-  --background: var(--color-earth-deep);
-  --foreground: var(--color-white);
+  --background: var(--color-canvas);
+  --foreground: var(--color-body);
 }
 
 body {
@@ -34,32 +27,7 @@ body {
   font-family: var(--font-sans);
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
+h1, h2, h3, h4, h5, h6 {
   font-family: var(--font-serif);
   color: var(--color-white);
-}
-
-.glass {
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  background: rgba(220, 215, 201, 0.08);
-  border: 1px solid rgba(220, 215, 201, 0.12);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
-}
-
-.noise {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 50;
-  opacity: 0.04;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
 }

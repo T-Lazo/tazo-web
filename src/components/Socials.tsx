@@ -1,28 +1,42 @@
-import { Github, Linkedin } from "lucide-react";
+import { Github, Linkedin, ArrowUpRight } from "lucide-react";
+
+const socials = [
+  {
+    icon: Github,
+    label: "GitHub",
+    handle: "@T-Lazo",
+    href: "https://github.com/T-Lazo",
+  },
+  {
+    icon: Linkedin,
+    label: "LinkedIn",
+    handle: "timothy-josh-lazo",
+    href: "https://www.linkedin.com/in/timothy-josh-lazo-11435434b/",
+  },
+]
 
 export default function Socials() {
-    const socials = [
-        { icon: Github, label: "GitHub", href: "https://github.com/T-Lazo", color: "hover:text-white" },
-        { icon: Linkedin, label: "LinkedIn", href: "https://www.linkedin.com/in/timothy-josh-lazo-11435434b/", color: "hover:text-blue-400" },
-    ];
-
-    return (
-        <section className="py-12 flex flex-col items-center">
-            <p className="text-beige/60 mb-8 text-lg font-medium tracking-wide">Connect with me</p>
-            <div className="flex gap-8">
-                {socials.map((social, index) => (
-                    <a
-                        key={index}
-                        href={social.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={`p-5 glass rounded-full transition-all duration-500 hover:scale-110 group border border-white/5 hover:border-chocolate/50 ${social.color}`}
-                        aria-label={social.label}
-                    >
-                        <social.icon className="w-7 h-7 text-beige transition-colors group-hover:text-chocolate" />
-                    </a>
-                ))}
+  return (
+    <section className="flex flex-col gap-3 py-2">
+      <p className="text-xs tracking-[0.2em] uppercase text-accent font-sans mb-5">Connect</p>
+      {socials.map((social) => (
+        <a
+          key={social.label}
+          href={social.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex items-center justify-between p-4 rounded-xl border border-edge bg-surface hover:border-accent/50 hover:bg-edge transition-all duration-200 group"
+        >
+          <div className="flex items-center gap-4">
+            <social.icon className="w-4 h-4 text-dim group-hover:text-white transition-colors" />
+            <div>
+              <p className="text-white text-sm font-medium font-sans">{social.label}</p>
+              <p className="text-dim text-xs font-sans">{social.handle}</p>
             </div>
-        </section>
-    );
+          </div>
+          <ArrowUpRight className="w-4 h-4 text-dim opacity-0 group-hover:opacity-100 group-hover:text-accent transition-all duration-200" />
+        </a>
+      ))}
+    </section>
+  )
 }
