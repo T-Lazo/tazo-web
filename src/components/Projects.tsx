@@ -14,6 +14,13 @@ type Project = {
 
 const projects: Project[] = [
   {
+    title: "Network Monitoring System",
+    description: "Distributed network telemetry system built as a team project. Python agents runs on client machine, collects local network metrics, cloud latency, and mobile data, then POST to a central Flask server. Data is stored in Supabase (PostgreSQL) and visualised on a React dashboard. Deployed on a college VM with Gunicorn.",
+    tags: ["Python", "Flask", "Supabase", "PostgreSQL", "React", "SQLAlchemy", "Gunicorn", "Virtual Machine"],
+    status: "Archived",
+    images: ["/network-dashboard.png"], // place your screenshot in /public/
+  },
+  {
     title: "Pi-hole Network Ad Blocker",
     description: "Deployed Pi-hole on a Raspberry Pi Zero 2W to route all home network DNS through a custom blocklist, providing ad-free browsing and malicious domain protection across every device. Extended with Tailscale so the same protection follows me on any network. Designed and 3D printed a custom enclosure for the Pi.",
     tags: ["Raspberry Pi", "Linux", "DNS", "Pi-hole", "Tailscale", "Networking", "3D Printing"],
@@ -24,13 +31,6 @@ const projects: Project[] = [
     ],
   },
   {
-    title: "Network Monitoring System",
-    description: "Distributed network telemetry system built as a team project. Python agents runs on client machine, collects local network metrics, cloud latency, and mobile data, then POST to a central Flask server. Data is stored in Supabase (PostgreSQL) and visualised on a React dashboard. Deployed on a college VM with Gunicorn.",
-    tags: ["Python", "Flask", "Supabase", "PostgreSQL", "React", "SQLAlchemy", "Gunicorn", "Virtual Machine"],
-    status: "Archived",
-    images: ["/network-dashboard.png"], // place your screenshot in /public/
-  },
-  {
     title: "Product Analysis & Concept Design",
     description: "Leaving Cert DCG project where I fully analysed an existing product, produced detailed freehand sketches, and compared it against an alternative. Designed an original concept from scratch using SolidWorks CAD, producing orthographic and isometric drawings with full dimensions and material annotations. Achieved a H1 with near-perfect marks.",
     tags: ["SolidWorks", "CAD", "Technical Drawing", "Product Design", "DCG"],
@@ -39,7 +39,7 @@ const projects: Project[] = [
   },
   {
     title: "Portfolio Site",
-    description: "The site you're looking at. Built with Next.js, Tailwind CSS v4, and Framer Motion. Features a ShaderGradient hero and a minimal dark design system.",
+    description: "The site you're looking at. Built with Next.js, Tailwind CSS v4, and Framer Motion.",
     tags: ["Next.js", "Tailwind CSS v4", "TypeScript", "Framer Motion", "ShaderGradient"],
     status: "In Progress",
   },
@@ -121,9 +121,8 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
                     <button
                       key={src}
                       onClick={() => setActiveImg(i)}
-                      className={`rounded-md overflow-hidden border transition-colors ${
-                        i === activeImg ? "border-accent/60" : "border-edge hover:border-dim/40"
-                      }`}
+                      className={`rounded-md overflow-hidden border transition-colors ${i === activeImg ? "border-accent/60" : "border-edge hover:border-dim/40"
+                        }`}
                     >
                       <img src={src} alt="" className="w-16 h-10 object-cover" />
                     </button>

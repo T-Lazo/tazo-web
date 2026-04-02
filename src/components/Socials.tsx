@@ -1,6 +1,12 @@
-import { Github, Linkedin, ArrowUpRight } from "lucide-react";
+import { Github, Linkedin, Mail, ArrowUpRight } from "lucide-react";
 
 const socials = [
+  {
+    icon: Linkedin,
+    label: "LinkedIn",
+    handle: "timothy-josh-lazo",
+    href: "https://www.linkedin.com/in/timothy-josh-lazo-11435434b/",
+  },
   {
     icon: Github,
     label: "GitHub",
@@ -8,10 +14,10 @@ const socials = [
     href: "https://github.com/T-Lazo",
   },
   {
-    icon: Linkedin,
-    label: "LinkedIn",
-    handle: "timothy-josh-lazo",
-    href: "https://www.linkedin.com/in/timothy-josh-lazo-11435434b/",
+    icon: Mail,
+    label: "Email",
+    handle: "tj.clazo@gmail.com",
+    href: "mailto:tj.clazo@gmail.com",
   },
 ]
 
