@@ -51,25 +51,23 @@ export default function About() {
   return (
     <div className="flex flex-col gap-14">
 
-      {/* Bio + cinematography clip */}
-      <div className="flex flex-col md:flex-row gap-8 items-start">
-        <div className="flex-1">
-          <p className="text-xs tracking-[0.2em] uppercase text-accent font-sans mb-4">About</p>
-          <p className="text-body leading-relaxed">{bio}</p>
-        </div>
+      {/* Bio */}
+      <div>
+        <p className="text-xs tracking-[0.2em] uppercase text-accent font-sans mb-4">About</p>
+        <p className="text-body leading-relaxed">{bio}</p>
+      </div>
 
-        {/* Cinematography video snippet — add your clip to /public/clip.mp4 */}
-        <div className="w-full md:w-36 shrink-0 aspect-[9/16] rounded-xl overflow-hidden border border-edge bg-surface">
-          <video
-            className="w-full h-full object-cover opacity-90"
-            autoPlay
-            muted
-            loop
-            playsInline
-          >
-            <source src="/clip.mp4" type="video/mp4" />
-          </video>
-        </div>
+      {/* Cinematography video snippet — add your clip to /public/clip.mp4 */}
+      <div className="w-full md:w-9/10 mx-auto aspect-video rounded-lg overflow-hidden border border-edge bg-surface opacity-67 hover:opacity-90 transition-opacity duration-300">
+        <video
+          className="w-full h-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+        >
+          <source src="/clip.mp4" type="video/mp4" />
+        </video>
       </div>
 
       {/* Skills */}
