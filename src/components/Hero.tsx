@@ -55,7 +55,7 @@ export default function Hero() {
 
   return (
     <section
-      className="relative w-full h-screen flex items-center justify-center overflow-hidden"
+      className="relative w-full h-[100svh] flex items-center justify-center overflow-hidden"
       onMouseMove={(e) => {
         const rect = e.currentTarget.getBoundingClientRect();
         rawX.set(e.clientX - rect.left - 130);
