@@ -15,8 +15,11 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "TJ | Developer",
-  description: "Personal portfolio of TJ, a web developer.",
+  title: "TJ Lazo",
+  description: "Personal portfolio of TJ",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
