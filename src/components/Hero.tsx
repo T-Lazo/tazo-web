@@ -125,7 +125,15 @@ export default function Hero() {
           className="block text-dim text-xs tracking-[0.25em] uppercase mb-8 font-sans"
           variants={fadeUp}
         >
-          ISE Student · University of Limerick
+          <a
+            href="https://software-engineering.ie"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-white transition-colors duration-200"
+          >
+            ISE Student
+          </a>
+          {" · University of Limerick"}
         </motion.span>
 
         <motion.h1
@@ -172,12 +180,16 @@ export default function Hero() {
         <span className="text-dim text-[10px] tracking-[0.3em] uppercase font-sans">
           Scroll
         </span>
-        <motion.div
-          className="w-px h-10 bg-dim/40"
-          animate={{ scaleY: [0, 1, 0] }}
-          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-          style={{ originY: 0 }}
-        />
+        <motion.svg
+          width="12"
+          height="8"
+          viewBox="0 0 12 8"
+          fill="none"
+          animate={{ y: [0, 4, 0], opacity: [0.4, 1, 0.4] }}
+          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+        >
+          <path d="M1 1l5 5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-dim" />
+        </motion.svg>
       </motion.div>
     </section>
   );
