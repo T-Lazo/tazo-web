@@ -20,6 +20,14 @@ type TimelineItem = {
 
 const experience: TimelineItem[] = [
   {
+    org: "Avtrain",
+    role: "Software Engineering Intern",
+    period: "Summer 2026",
+    bullets: [
+      "Developing the Operations Manual Generator (OMG), a tool that streamlines how drone operators create and maintain the operations manuals required for regulatory approval.",
+    ],
+  },
+  {
     org: "Analog Devices",
     role: "Software Engineering Intern",
     period: "Summer 2025 – Winter 2025",
