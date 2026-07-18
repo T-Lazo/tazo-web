@@ -36,6 +36,18 @@ export default function Hero() {
     "studying",
     "procrastinating",
     "doomscrolling",
+    "playing guitar",
+    "learning how to surf",
+    "playing chess",
+    "on the game",
+    "learning something new",
+    "editing a video",
+    "reading",
+    "listening to a podcast",
+    "watching tech videos",
+    "building something",
+    "travelling somewhere",
+    "making a commit",
   ];
 
   const [index, setIndex] = useState(0);
