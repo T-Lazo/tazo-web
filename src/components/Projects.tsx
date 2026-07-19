@@ -15,7 +15,7 @@ type Project = {
 const projects: Project[] = [
   {
     title: "Digital Wardrobe",
-    description: "Self-hosted digital wardrobe web app — both the site and API run on a Raspberry Pi home server, with your own account and your own AI plugged in via API key. The AI visually analyses photos of your clothes and generates a description for each item (manually editable if it gets one wrong), and those descriptions become the structured data used to sort and organise your wardrobe — and that the AI parses to help put outfits together from what you actually own.",
+    description: "Self-hosted digital wardrobe web app where both the site and API run on a Raspberry Pi home server, with your own account and your own AI plugged in via API key. The AI visually analyses photos of your clothes and generates a description for each item, which you can edit manually if it gets one wrong. Those descriptions are the structured data that sorts and organises your wardrobe, and that the AI parses to help put outfits together from what you actually own.",
     tags: ["Python", "FastAPI", "PostgreSQL", "Raspberry Pi", "Self-Hosted", "AI"],
     status: "In Progress",
   },
