@@ -37,6 +37,12 @@ const projects: Project[] = [
     ],
   },
   {
+    title: "Blockchain Ticketing Dapp",
+    description: "Ethereum-based event ticketing dapp built primarily to learn how blockchain works under the hood. Tickets are an ERC-20 token, via OpenZeppelin, deployed to the Sepolia testnet. Attendees send SETH to a payable buyTicket() solidity function to purchase one, and can return it to reclaim their SETH. The app Supports wallet creation with password-encrypted keystore export, MetaMask-based purchases and returns, and dedicated doorman and venue views for verifying tickets and tracking sales.",
+    tags: ["Solidity", "Web3.js", "MetaMask", "Ethereum", "OpenZeppelin", "ERC-20", "Sepolia Testnet", "JavaScript"],
+    status: "Archived",
+  },
+  {
     title: "Product Analysis & Concept Design",
     description: "Leaving Cert DCG project where I fully analysed an existing product, produced detailed freehand sketches, and compared it against an alternative. Designed an original concept from scratch using SolidWorks CAD, producing orthographic and isometric drawings with full dimensions and material annotations. Achieved a H1 with near-perfect marks.",
     tags: ["SolidWorks", "CAD", "Technical Drawing", "Product Design", "DCG"],
