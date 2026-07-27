@@ -7,7 +7,8 @@ const skills = [
   "Flask", "Gunicorn", "React", "TypeScript", "Next.js", "HTML", "CSS",
   "Embedded Linux", "Git", "Docker",
   "SSH", "Raspberry Pi", "Tailscale",
-  "Technical Docs", "micro:bit", "SolidWorks", "Davinci Resolve"
+  "Technical Docs", "micro:bit", "SolidWorks", "Davinci Resolve",
+  "Solidity", "Web3.js", "MetaMask", "Ethereum / Sepolia Testnet"
 ]
 
 type TimelineItem = {
