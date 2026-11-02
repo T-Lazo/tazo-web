@@ -3,7 +3,7 @@ I've interned at Analog Devices and Avtrain. I love learning new skills and meet
 Hope you enjoy my website ◡̈ `
 
 const skills = [
-  "Python", "Java", "Kotlin", "C", "C++", "Bash", "Supabase",
+  "Python", "Java", "Kotlin", "C", "C++", "Scala", "Bash", "Supabase",
   "Flask", "Gunicorn", "React", "TypeScript", "Next.js", "HTML", "CSS",
   "Embedded Linux", "Git", "Docker",
   "SSH", "Raspberry Pi", "Tailscale",
