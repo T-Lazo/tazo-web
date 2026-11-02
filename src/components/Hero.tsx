@@ -96,7 +96,8 @@ export default function Hero() {
 
       {/* ShaderGradient — full bleed background */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        <ShaderGradientCanvas style={{ width: "100%", height: "100%" }}>
+        {/* lazyLoad off: otherwise the canvas unmounts off-screen and restarts on scroll back */}
+        <ShaderGradientCanvas style={{ width: "100%", height: "100%" }} lazyLoad={false}>
           <ShaderGradient
             type="waterPlane"
             animate="on"
