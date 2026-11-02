@@ -1,6 +1,6 @@
 const bio = `3rd Year Immersive Software Engineering student at the University of Limerick. 
 I've interned at Analog Devices and Avtrain. I love learning new skills and meeting new people to learn from and connect with.
-Hope you enjoy my website ◡̈ `
+Hope you enjoy my website!`
 
 const skills = [
   "Python", "Java", "Kotlin", "C", "C++", "Scala", "Bash", "Supabase",
