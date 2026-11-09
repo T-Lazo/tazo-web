@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import {
   AnimatePresence,
@@ -13,7 +14,7 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
-import { flattenJourney, journey, journeyConfig, type Marker } from "@/data/journey";
+import { flattenJourney, journey, journeyConfig, type Marker, type Photo } from "@/data/journey";
 
 const ShaderGradientCanvas = dynamic(
   () => import("@shadergradient/react").then((m) => m.ShaderGradientCanvas),
@@ -28,7 +29,7 @@ const markers = flattenJourney(journey);
 const found = markers.findIndex((m) => m.current);
 const endIndex = found === -1 ? markers.length - 1 : found;
 
-const { ball, camera } = journeyConfig;
+const { ball, camera, photos: photoConfig } = journeyConfig;
 const tint = journeyConfig.accent;
 
 // The ball starts this far below the top of the journey's frame. The frame overlaps the hero
@@ -281,6 +282,7 @@ export default function Journey() {
                 point={geo.points[i]}
                 at={geo.at[i]}
                 along={along}
+                reduce={reduce}
               />
             ))}
 
@@ -398,12 +400,14 @@ function Milestone({
   point,
   at,
   along,
+  reduce,
 }: {
   marker: Marker;
   geo: Geometry;
   point: { x: number; y: number };
   at: number;
   along: MotionValue<number>;
+  reduce: boolean;
 }) {
   // 0 → 1 as the ball approaches this marker
   const p = useTransform(along, [at - 260, at], [0, 1]);
@@ -433,8 +437,43 @@ function Milestone({
       ? { right: geo.width - point.x + gap, top: point.y, width }
       : { left: point.x + gap, top: point.y, width };
 
+  // Photos: on desktop they fill the empty side of the road opposite the text; on mobile they
+  // sit under the text. The cluster shrinks if the screen is too narrow for it.
+  const photos = photoConfig.layout !== "off" ? marker.photos ?? [] : [];
+  const photoSize = geo.mobile ? photoConfig.mobileSize : photoConfig.size;
+  const clusterW = photoSize * CLUSTER_W;
+  const clusterH = photoSize * CLUSTER_H;
+  const photoScale = geo.mobile ? 1 : Math.min(1, width / clusterW);
+  const photoBox = (
+    <div
+      className="relative"
+      style={{
+        width: clusterW,
+        height: clusterH,
+        transform: photoScale < 1 ? `scale(${photoScale})` : undefined,
+        // shrink towards the road: photos right of the node (text on the left) anchor on their left edge
+        transformOrigin: geo.mobile || left ? "left center" : "right center",
+      }}
+    >
+      {photoConfig.layout === "carousel" ? (
+        <PhotoCarousel photos={photos} size={photoSize} p={p} arrived={arrived} reduce={reduce} />
+      ) : (
+        <PhotoStack photos={photos} size={photoSize} p={p} arrived={arrived} away={geo.mobile || left ? 1 : -1} />
+      )}
+    </div>
+  );
+
   return (
     <>
+      {photos.length > 0 && !geo.mobile && (
+        <div
+          className="absolute -translate-y-1/2"
+          style={left ? { left: point.x + gap, top: point.y } : { right: geo.width - point.x + gap, top: point.y }}
+        >
+          {photoBox}
+        </div>
+      )}
+
       {/* Node on the road */}
       <span
         aria-hidden
@@ -455,8 +494,11 @@ function Milestone({
       )}
 
       {/* Text beside it */}
+      {/* Desktop: centred on the marker. Mobile: title level with the marker, photos hanging below. */}
       <div
-        className={`absolute -translate-y-1/2 ${left ? "text-right" : ""}`}
+        className={`absolute ${
+          geo.mobile ? (isYear ? "-translate-y-9" : "-translate-y-4") : "-translate-y-1/2"
+        } ${left ? "text-right" : ""}`}
         style={textStyle}
       >
         <motion.div style={{ opacity: titleOpacity }}>
@@ -478,7 +520,196 @@ function Milestone({
             </p>
           )}
         </motion.div>
+        {photos.length > 0 && geo.mobile && <div className="mt-4">{photoBox}</div>}
       </div>
     </>
+  );
+}
+
+// ── Polaroids ─────────────────────────────────────────────────────────────────
+
+// Cluster size in multiples of the polaroid width (room for the fanned-out cards)
+const CLUSTER_W = 1.9;
+const CLUSTER_H = 1.5;
+
+// Where each card in the stack ends up once the ball arrives (x/y in polaroid widths, degrees).
+// The first photo is on top.
+const FAN = [
+  { x: 0.02, y: 0, r: -3 },
+  { x: -0.4, y: 0.07, r: -11 },
+  { x: 0.4, y: 0.05, r: 9 },
+];
+
+function Polaroid({ photo, size }: { photo: Photo; size: number }) {
+  return (
+    <div
+      className="rounded-[2px] bg-[#F4F1EA] shadow-[0_12px_30px_rgba(0,0,0,0.5)]"
+      style={{ width: size, padding: size * 0.05, paddingBottom: size * 0.18 }}
+    >
+      <div className="relative aspect-square w-full overflow-hidden bg-surface">
+        <Image src={photo.src} alt={photo.alt} fill sizes={`${Math.round(size)}px`} className="object-cover" />
+      </div>
+    </div>
+  );
+}
+
+// Gold-tinted and faint before the ball arrives, full colour when it does
+function usePhotoLook(p: MotionValue<number>) {
+  const opacity = useTransform(p, [0, 1], [0.35, 1]);
+  const filter = useTransform(p, (v) => `grayscale(${(1 - v) * 0.9}) sepia(${(1 - v) * 0.6})`);
+  return { opacity, filter };
+}
+
+function PhotoStack({
+  photos,
+  size,
+  p,
+  arrived,
+  away,
+}: {
+  photos: Photo[];
+  size: number;
+  p: MotionValue<number>;
+  arrived: boolean;
+  away: 1 | -1; // which side is away from the road, so the spread never covers the ball
+}) {
+  const look = usePhotoLook(p);
+  const shown = photos.slice(0, Math.min(photoConfig.maxStack, FAN.length));
+
+  // Hover (or tap on touch screens) spreads the cards so each photo can be seen.
+  // Only once the ball has arrived, so the faint pile doesn't react while scrolling past.
+  const [spread, setSpread] = useState(false);
+  const open = spread && arrived;
+  const amount = useSpring(0, { stiffness: 260, damping: 26 });
+  useEffect(() => amount.set(open ? 1 : 0), [amount, open]);
+
+  return (
+    <motion.div
+      className={`absolute inset-0 ${arrived ? "pointer-events-auto" : ""}`}
+      style={{ ...look, zIndex: open ? 20 : undefined }}
+      onHoverStart={() => setSpread(true)}
+      onHoverEnd={() => setSpread(false)}
+      onPointerDown={(e) => e.pointerType === "touch" && setSpread((v) => !v)}
+    >
+      {shown.map((photo, i) => (
+        <StackCard
+          key={photo.src}
+          photo={photo}
+          size={size}
+          p={p}
+          amount={amount}
+          target={FAN[i]}
+          wide={{ ...SPREAD[i], x: SPREAD[i].x + SPREAD_SHIFT * away }}
+          z={shown.length - i}
+          open={open}
+        />
+      ))}
+    </motion.div>
+  );
+}
+
+// Where each card goes when the stack is hovered: nearly side by side, barely tilted,
+// and shifted away from the road by SPREAD_SHIFT polaroid widths
+const SPREAD = [
+  { x: 0, y: -0.05, r: -1 },
+  { x: -0.8, y: 0.03, r: -4 },
+  { x: 0.8, y: 0.03, r: 3 },
+];
+const SPREAD_SHIFT = 0.4;
+
+function StackCard({
+  photo,
+  size,
+  p,
+  amount,
+  target,
+  wide,
+  z,
+  open,
+}: {
+  photo: Photo;
+  size: number;
+  p: MotionValue<number>;
+  amount: MotionValue<number>;
+  target: { x: number; y: number; r: number };
+  wide: { x: number; y: number; r: number };
+  z: number;
+  open: boolean;
+}) {
+  // Pile → fan as the ball approaches (p), then fan → spread on hover (amount)
+  const fanned = () => clamp((p.get() - 0.25) / 0.75, 0, 1);
+  const mix = (pile: number, fan: number, spread: number) => {
+    const base = pile + (fan - pile) * fanned();
+    return base + (spread - base) * amount.get();
+  };
+  const x = useTransform(() => mix(target.x * size * 0.15, target.x * size, wide.x * size));
+  const y = useTransform(() => mix(target.y * size * 0.15, target.y * size, wide.y * size));
+  const rotate = useTransform(() => mix(target.r * 0.3, target.r, wide.r));
+  return (
+    <motion.div
+      className="absolute left-1/2 top-1/2"
+      style={{ x, y, rotate, zIndex: z, marginLeft: -size / 2, marginTop: -size * 0.615 }}
+      whileHover={open ? { scale: 1.12, zIndex: 10 } : undefined}
+      transition={{ type: "spring", stiffness: 300, damping: 24 }}
+    >
+      <Polaroid photo={photo} size={size} />
+    </motion.div>
+  );
+}
+
+function PhotoCarousel({
+  photos,
+  size,
+  p,
+  arrived,
+  reduce,
+}: {
+  photos: Photo[];
+  size: number;
+  p: MotionValue<number>;
+  arrived: boolean;
+  reduce: boolean;
+}) {
+  const look = usePhotoLook(p);
+  const [index, setIndex] = useState(0);
+
+  // Only cycles while the ball is at (or past) this milestone
+  useEffect(() => {
+    if (!arrived || reduce || photos.length < 2) return;
+    const id = setInterval(() => setIndex((i) => (i + 1) % photos.length), photoConfig.interval * 1000);
+    return () => clearInterval(id);
+  }, [arrived, reduce, photos.length]);
+
+  const at = (k: number) => photos[(index + k) % photos.length];
+  const card = "absolute left-1/2 top-1/2";
+  const offset = { marginLeft: -size / 2, marginTop: -size * 0.615 };
+
+  return (
+    <motion.div className="absolute inset-0" style={look}>
+      {/* The next photos peek out behind, like a stack */}
+      {photos.length > 2 && (
+        <div className={card} style={{ ...offset, rotate: "7deg", translate: `${size * 0.12}px ${size * 0.04}px`, opacity: 0.55 }}>
+          <Polaroid photo={at(2)} size={size} />
+        </div>
+      )}
+      {photos.length > 1 && (
+        <div className={card} style={{ ...offset, rotate: "-6deg", translate: `${-size * 0.1}px ${size * 0.02}px`, opacity: 0.75 }}>
+          <Polaroid photo={at(1)} size={size} />
+        </div>
+      )}
+      <AnimatePresence initial={false}>
+        <motion.div
+          key={index}
+          className={card}
+          style={offset}
+          initial={{ opacity: 0, rotate: -6, scale: 0.96 }}
+          animate={{ opacity: 1, rotate: index % 2 ? 2 : -2, scale: 1 }}
+          exit={{ opacity: 0, rotate: 4, scale: 1.02 }}
+          transition={{ duration: 0.9, ease: "easeInOut" }}
+        >
+          <Polaroid photo={at(0)} size={size} />
+        </motion.div>
+      </AnimatePresence>
+    </motion.div>
   );
 }
