@@ -52,6 +52,9 @@ export const journeyConfig = {
   segmentScroll: 0.32,
   // How much the ball lingers at each milestone and zips between them. 0 = constant speed.
   dwell: 0.7,
+  // Pause on the last milestone before the rest of the page slides up over the journey,
+  // as a fraction of the screen height.
+  endRest: 0.2,
   // How far the road swings left/right on desktop, in px (capped at 16% of the width).
   swing: 180,
 

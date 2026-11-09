@@ -237,11 +237,18 @@ export default function Journey() {
   useMotionValueEvent(geoMV, "change", sync);
 
   // Pin length: rise to centre + travel the road + a short hold on the last stop
+  // Pin length: rise to centre + travel the road + a short rest on the last stop + one more
+  // screen, during which the next section slides up over the still-pinned journey.
+  const rest = journeyConfig.endRest;
   const sectionHeight = geo
     ? reduce
       ? geo.height + START
-      : journeyConfig.segmentScroll * geo.vh * (endIndex + 1) + geo.vh / 2 + START + 0.35 * geo.vh
+      : journeyConfig.segmentScroll * geo.vh * (endIndex + 1) + geo.vh * 1.5 + START + rest * geo.vh
     : undefined;
+
+  // The next section overlaps the journey's last screen so it can cover it (see page.tsx).
+  // Reduced motion has no pin, so there it just starts a little below the last milestone.
+  const bottomOverlap = geo ? (reduce ? geo.vh - 100 : geo.vh) : 0;
 
   const size = geo?.mobile ? ball.mobileSize : ball.size;
 
@@ -250,7 +257,7 @@ export default function Journey() {
       ref={sectionRef}
       aria-label="My journey so far"
       className="pointer-events-none relative z-20"
-      style={{ marginTop: -START, height: sectionHeight ?? "250vh" }}
+      style={{ marginTop: -START, marginBottom: -bottomOverlap, height: sectionHeight ?? "250vh" }}
     >
       <div className={`${reduce ? "relative h-full" : "sticky top-0 h-[100svh]"} overflow-hidden`}>
         {/* Background layers sit behind the world (road, milestones, ball) */}
