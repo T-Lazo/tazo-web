@@ -45,3 +45,5 @@ MyTasks.md
 local
 .agents
 .claude
+
+.playwright-mcp/
