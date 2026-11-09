@@ -1,11 +1,6 @@
 # Tazo's Website
+Personal portfolio project 
 
-My personal website built with [Next.js](https://nextjs.org) and Tailwind CSS.
+<img width="3824" height="2484" alt="TazoWebHero 2" src="https://github.com/user-attachments/assets/640fae6f-4bbe-4a44-80dc-4b8df4a9bb17" />
 
-## Running Locally
 
-```bash
-npm run dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
