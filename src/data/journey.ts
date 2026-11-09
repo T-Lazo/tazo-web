@@ -89,6 +89,27 @@ export const journeyConfig = {
     maxStack: 3, // most polaroids shown at once in "stack"
     interval: 3.2, // seconds per photo in "carousel"
   },
+
+  // Background behind the road (inspired by GSAP's "mesmerising effects" section)
+  background: {
+    // Pills (after GSAP's "mesmerising effects"): the journey starts with a scatter of dots,
+    // they all stretch into pills together as the ball travels, then dim out near the end.
+    // Each pill has a depth: near ones are bigger, brighter and faster; far ones tiny, dim, slow.
+    pills: {
+      enabled: true,
+      count: 24,
+      mobileCount: 16,
+      colors: ["#D4AF37", "#006850"], // gradient across each pill: gold → emerald
+      opacity: 0.7, // overall cap; keeps the ball the brightest thing on screen
+      speed: [0.35, 1.8] as [number, number], // far → near, relative to the road
+      width: [3, 24] as [number, number], // far → near dot diameter, px
+      stretch: [3, 8] as [number, number], // fully stretched length, in multiples of the width
+      // Journey progress (0 → 1) where the stretch starts/ends and the fade-out starts
+      stretchFrom: 0.1,
+      stretchTo: 0.6,
+      fadeFrom: 0.78,
+    },
+  },
 };
 
 export type Photo = { src: string; alt: string };

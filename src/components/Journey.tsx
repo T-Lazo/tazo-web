@@ -14,6 +14,7 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
+import JourneyPills from "@/components/JourneyPills";
 import { flattenJourney, journey, journeyConfig, type Marker, type Photo } from "@/data/journey";
 
 const ShaderGradientCanvas = dynamic(
@@ -171,6 +172,11 @@ export default function Journey() {
     const g = geoMV.get();
     return g ? pointAt(g, along.get()).y : 0;
   });
+  // 0 at the start of the road → 1 at the current milestone (drives background fades)
+  const progress = useTransform(() => {
+    const g = geoMV.get();
+    return g && g.length ? along.get() / g.length : 0;
+  });
   const drawn = useTransform(() => {
     const g = geoMV.get();
     return g ? along.get() / g.total : 0;
@@ -247,6 +253,10 @@ export default function Journey() {
       style={{ marginTop: -START, height: sectionHeight ?? "250vh" }}
     >
       <div className={`${reduce ? "relative h-full" : "sticky top-0 h-[100svh]"} overflow-hidden`}>
+        {/* Background layers sit behind the world (road, milestones, ball) */}
+        {geo && !reduce && journeyConfig.background.pills.enabled && (
+          <JourneyPills camX={camX} camY={camY} progress={progress} width={geo.width} height={geo.vh} mobile={geo.mobile} />
+        )}
         {geo && (
           <motion.div
             className="absolute left-0 top-0"
