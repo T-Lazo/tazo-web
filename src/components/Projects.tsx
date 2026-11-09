@@ -101,7 +101,8 @@ function ProjectModal({ project, onClose }: { project: Project; onClose: () => v
         </div>
 
         {/* Content */}
-        <div className="overflow-y-auto flex-1 p-4 flex flex-col gap-3">
+        {/* data-lenis-prevent: let this panel scroll natively instead of the page */}
+        <div data-lenis-prevent className="overflow-y-auto flex-1 p-4 flex flex-col gap-3">
           {project.pdfUrl && (
             <iframe
               src={project.pdfUrl}
