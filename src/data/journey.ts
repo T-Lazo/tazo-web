@@ -1,0 +1,148 @@
+// The scroll journey under the hero. Everything the Journey component shows comes from here.
+//
+// Adding a residency: push a stop into its year's `stops` and move `current: true` onto it.
+// Adding a new stage (e.g. a full-time job): append a new group with its own `label`.
+
+export type YearLabelMode = "dot" | "sticky" | "off";
+
+// The ball: ShaderGradient's "Pensive" sphere, recoloured black and gold.
+const goldBall = {
+  type: "sphere",
+  animate: "on",
+  uTime: 0,
+  uSpeed: 0.3,
+  uStrength: 1.5,
+  uDensity: 1.1,
+  uFrequency: 5.5,
+  uAmplitude: 7,
+  positionX: 0,
+  positionY: 0,
+  positionZ: 0,
+  rotationX: 0,
+  rotationY: 0,
+  rotationZ: 140,
+  color1: "#D4AF37", // base: polished gold (this slot covers most of the ball)
+  color2: "#0A0804", // near-black, swirls through the gold
+  color3: "#F6DE8D", // highlight
+  reflection: 0.5,
+  cAzimuthAngle: 250,
+  cPolarAngle: 140,
+  cDistance: 1.5,
+  cameraZoom: 12.5,
+  lightType: "3d",
+  brightness: 1,
+  envPreset: "city",
+  grain: "off", // the library's grain is coloured noise (red/green speckle at this size); see ball.grain
+} as const;
+
+export const journeyConfig = {
+  // How the current year is shown while scrolling:
+  //   "dot"    → label rides just above the ball
+  //   "sticky" → label pinned to the top of the screen
+  //   "off"    → only the year markers on the road
+  yearLabel: "dot" as YearLabelMode,
+
+  // Road spacing between markers, as a fraction of the screen height. Bigger = longer road.
+  firstGap: 0.4,
+  stopSpacing: 0.38,
+  yearSpacing: 0.48,
+  // Scrolling it takes to travel from one milestone to the next, as a fraction of the screen
+  // height. Smaller = shorter journey.
+  segmentScroll: 0.32,
+  // How much the ball lingers at each milestone and zips between them. 0 = constant speed.
+  dwell: 0.7,
+  // How far the road swings left/right on desktop, in px (capped at 16% of the width).
+  swing: 180,
+
+  // Camera. followX: 1 keeps the ball dead centre sideways, 0 never pans sideways.
+  // trail: lower stiffness = the camera lags further behind the ball on the bends.
+  camera: {
+    followX: 0.4,
+    trail: { stiffness: 120, damping: 24, mass: 0.8 },
+  },
+
+  // Accent for the road, labels and markers
+  accent: "#D4AF37", // polished gold
+
+  ball: {
+    size: 56,
+    mobileSize: 40,
+    shader: goldBall,
+    glow: "rgba(212, 175, 55, 0.4)",
+    // Monochrome film grain laid over the ball. 0 = none, 1 = heavy.
+    grain: 0.55,
+    // Black in the ball: shading falls off to near-black away from the highlight,
+    // and a soft dark band slowly circles it. 0 = none, 1 = strongest.
+    shadow: 1,
+    bandSeconds: 9, // time for the dark band to go round once
+  },
+};
+
+type Entry = {
+  title: string;
+  detail: string; // the one line that fades in when the dot arrives
+  period: string;
+  current?: boolean; // where the dot comes to rest; exactly one entry should have it
+};
+
+export type Stop = Entry & { id: string };
+
+export type JourneyGroup =
+  | { id: string; stops: Stop[] } // no year marker (e.g. the prologue)
+  | (Entry & { id: string; label: string; stops: Stop[] });
+
+export const journey: JourneyGroup[] = [
+  {
+    id: "prologue",
+    stops: [
+      { id: "castletroy", title: "Castletroy College", detail: "567 / 625 points", period: "2024" },
+    ],
+  },
+  {
+    id: "y1",
+    label: "Year 1",
+    title: "University of Limerick",
+    detail: "Immersive Software Engineering",
+    period: "Sep 2024 – May 2025",
+    stops: [
+      { id: "adi", title: "Analog Devices", detail: "6 months", period: "Jun 2025 – Jan 2026" },
+    ],
+  },
+  {
+    id: "y2",
+    label: "Year 2",
+    title: "University of Limerick",
+    detail: "Back at UL",
+    period: "Jan 2026 – May 2026",
+    stops: [
+      { id: "avtrain", title: "Avtrain", detail: "3 months", period: "Jun 2026 – Aug 2026" },
+    ],
+  },
+  {
+    id: "y3",
+    label: "Year 3",
+    title: "University of Limerick",
+    detail: "Back at UL",
+    period: "Sep 2026 –",
+    current: true,
+    stops: [],
+  },
+];
+
+export type Marker = Entry & {
+  id: string;
+  kind: "year" | "stop";
+  year?: string; // the year this marker belongs to, for the moving year label
+};
+
+// One flat list of markers in scroll order.
+export function flattenJourney(groups: JourneyGroup[]): Marker[] {
+  return groups.flatMap((g) => {
+    const year = "label" in g ? g.label : undefined;
+    const head: Marker[] =
+      "label" in g
+        ? [{ id: g.id, kind: "year", year, title: g.title, detail: g.detail, period: g.period, current: g.current }]
+        : [];
+    return [...head, ...g.stops.map((s): Marker => ({ ...s, kind: "stop", year }))];
+  });
+}

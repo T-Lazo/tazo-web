@@ -183,7 +183,7 @@ export default function Hero() {
       {/* Bottom fade into solid section */}
       <div className="absolute bottom-0 left-0 right-0 z-10 h-40 pointer-events-none bg-gradient-to-b from-transparent to-canvas" />
 
-      {/* Scroll indicator */}
+      {/* Scroll label — the journey's dot peeks in just below it and acts as the cue */}
       <motion.div
         className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-3"
         initial={{ opacity: 0 }}
@@ -193,16 +193,6 @@ export default function Hero() {
         <span className="text-dim text-[10px] tracking-[0.3em] uppercase font-sans">
           Scroll
         </span>
-        <motion.svg
-          width="12"
-          height="8"
-          viewBox="0 0 12 8"
-          fill="none"
-          animate={{ y: [0, 4, 0], opacity: [0.4, 1, 0.4] }}
-          transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
-        >
-          <path d="M1 1l5 5 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-dim" />
-        </motion.svg>
       </motion.div>
     </section>
   );
