@@ -47,3 +47,5 @@ local
 .claude
 
 .playwright-mcp/
+# raw journey photos (originals may contain GPS); web-ready copies live in public/journey
+/scroll-journey-pictures/
