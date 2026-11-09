@@ -93,6 +93,21 @@ export const journeyConfig = {
     interval: 3.2, // seconds per photo in "carousel"
   },
 
+  // Big title behind the start of the road. The ball rolls across it; it drifts up slower than
+  // the road and fades out as the ball nears the first milestone.
+  title: {
+    enabled: true,
+    text: "The journey so far",
+    eyebrow: "2024 — Now",
+    style: "fill" as "fill" | "outline", // "outline" = thin gold outline instead of solid letters
+    opacity: 0.14,
+    speed: 0.6, // relative to the road; < 1 drifts slower, so it feels further back
+    // Extra road before the first milestone so the title has room, as a fraction of the screen height
+    space: 0.6,
+    // Fades out between these points on the way to the first milestone (0 = start, 1 = arrived)
+    fadeOut: [0.35, 0.8] as [number, number],
+  },
+
   // Background behind the road (inspired by GSAP's "mesmerising effects" section)
   background: {
     // Pills (after GSAP's "mesmerising effects"): the journey starts with a scatter of dots,

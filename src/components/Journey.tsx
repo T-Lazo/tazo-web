@@ -15,6 +15,7 @@ import {
   type MotionValue,
 } from "framer-motion";
 import JourneyPills from "@/components/JourneyPills";
+import JourneyTitle from "@/components/JourneyTitle";
 import { flattenJourney, journey, journeyConfig, type Marker, type Photo } from "@/data/journey";
 
 const ShaderGradientCanvas = dynamic(
@@ -69,7 +70,9 @@ function buildGeometry(width: number, vh: number): Geometry {
   const pts = [{ x: cx, y: 0 }];
   let y = 0;
   markers.forEach((m, i) => {
-    const gap = i === 0 ? journeyConfig.firstGap : m.kind === "year" ? journeyConfig.yearSpacing : journeyConfig.stopSpacing;
+    const titleSpace = journeyConfig.title.enabled ? journeyConfig.title.space : 0;
+    const gap =
+      i === 0 ? journeyConfig.firstGap + titleSpace : m.kind === "year" ? journeyConfig.yearSpacing : journeyConfig.stopSpacing;
     y += gap * vh;
     pts.push({ x: cx + (i % 2 === 0 ? -amp : amp), y });
   });
@@ -177,6 +180,11 @@ export default function Journey() {
     const g = geoMV.get();
     return g && g.length ? along.get() / g.length : 0;
   });
+  // 0 at the start of the road → 1 at the first milestone (drives the title fade)
+  const toFirst = useTransform(() => {
+    const g = geoMV.get();
+    return g && g.at[0] ? along.get() / g.at[0] : 0;
+  });
   const drawn = useTransform(() => {
     const g = geoMV.get();
     return g ? along.get() / g.total : 0;
@@ -263,6 +271,9 @@ export default function Journey() {
         {/* Background layers sit behind the world (road, milestones, ball) */}
         {geo && !reduce && journeyConfig.background.pills.enabled && (
           <JourneyPills camX={camX} camY={camY} progress={progress} width={geo.width} height={geo.vh} mobile={geo.mobile} />
+        )}
+        {geo && journeyConfig.title.enabled && (
+          <JourneyTitle camY={camY} start={START} toFirst={toFirst} height={geo.vh} reduce={reduce} />
         )}
         {geo && (
           <motion.div
