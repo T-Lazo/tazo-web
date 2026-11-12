@@ -91,6 +91,32 @@ export const journeyConfig = {
     mobileSize: 104,
     maxStack: 3, // most polaroids shown at once in "stack"
     interval: 3.2, // seconds per photo in "carousel"
+    // How close the ball has to be before hover/tap spreads the stack: 0 = as soon as it starts
+    // fanning out, 1 = only once the ball has landed. Stays open to hover after the ball passes.
+    // Hovering early also brings the photos to full colour.
+    openFrom: 0.6,
+  },
+
+  // The splash when the ball lands on a milestone (only when it arrives moving forward, not
+  // when scrolling back up through one). Off for reduced motion.
+  arrival: {
+    enabled: true,
+    rings: 3, // gold rings spreading out from the marker, one after another
+    ringSize: 210, // how wide the rings spread, px
+    mobileRingSize: 150,
+    glow: true, // soft gold glow that blooms under the marker and fades
+    bump: 0.12, // how much the ball swells on landing (0 = no bump)
+  },
+
+  // Magnetic milestones: stop scrolling close to one and the page eases the rest of the way so
+  // the ball lands on it. Never pulls while you're still scrolling. Off for reduced motion.
+  magnet: {
+    enabled: true,
+    // How close counts, as a fraction of the scrolling between two milestones (0.35 = the last
+    // third or so of the approach, either side of the milestone)
+    range: 0.35,
+    delay: 300, // ms of stillness before it pulls
+    duration: 0.7, // seconds the pull takes
   },
 
   // Big title behind the start of the road. The ball rolls across it; it drifts up slower than
