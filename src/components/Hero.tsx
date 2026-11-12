@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { motion, AnimatePresence, useMotionValue, useSpring } from "framer-motion";
 import { useState, useEffect } from "react";
+import { useLoader, type HeadlineGlide } from "@/components/loader/Loader";
 
 const ShaderGradientCanvas = dynamic(
   () => import("@shadergradient/react").then((m) => m.ShaderGradientCanvas),
@@ -28,6 +29,22 @@ const fadeUp = {
   },
 };
 
+// The headline's motion while the loading screen hands over to it (see loader/Loader.tsx)
+function handoffMotion(hold: boolean, g: HeadlineGlide | null) {
+  if (g?.moving) {
+    const duration = g.durationMs / 1000;
+    return {
+      animate: { opacity: [0, 1, 1], x: 0, y: 0, scale: 1 },
+      transition: {
+        default: { duration, ease: g.ease },
+        opacity: { duration, times: g.fadeInTimes, ease: "linear" as const },
+      },
+    };
+  }
+  if (g) return { animate: { opacity: 0, x: g.x, y: g.y, scale: g.scale }, transition: { duration: 0 } };
+  return { animate: { opacity: hold ? 0 : 1, x: 0, y: 0, scale: 1 }, transition: { duration: 0 } };
+}
+
 export default function Hero() {
   const phrases = [
     "building software",
@@ -51,6 +68,12 @@ export default function Hero() {
   ];
 
   const [index, setIndex] = useState(0);
+  // Hold the entrance animations until the loading screen says so
+  const { revealed, holdHeadline, headlineGlide } = useLoader();
+  // When the loading screen flies its own copy of the headline into place, the real one skips
+  // its own entrance and glides home together with the copy instead.
+  const [handedOff, setHandedOff] = useState(false);
+  if (holdHeadline && !handedOff) setHandedOff(true);
 
   const rawX = useMotionValue(-1000);
   const rawY = useMotionValue(-1000);
@@ -95,7 +118,7 @@ export default function Hero() {
       />
 
       {/* ShaderGradient — full bleed background */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
+      <div className="absolute inset-0 z-0 pointer-events-none" data-preload="canvas">
         {/* lazyLoad off: otherwise the canvas unmounts off-screen and restarts on scroll back */}
         <ShaderGradientCanvas style={{ width: "100%", height: "100%" }} lazyLoad={false}>
           <ShaderGradient
@@ -132,7 +155,7 @@ export default function Hero() {
         className="relative z-20 text-center px-6 select-none"
         variants={stagger}
         initial="hidden"
-        animate="show"
+        animate={revealed ? "show" : "hidden"}
       >
         <motion.span
           className="block text-dim text-xs tracking-[0.25em] uppercase mb-8 font-sans"
@@ -150,8 +173,11 @@ export default function Hero() {
         </motion.span>
 
         <motion.h1
+          data-loader-headline
           className="text-7xl md:text-[7.5rem] lg:text-[9rem] font-serif font-bold tracking-tight text-white leading-none mb-8"
-          variants={fadeUp}
+          {...(handedOff
+            ? { variants: undefined, ...handoffMotion(holdHeadline, headlineGlide) }
+            : { variants: fadeUp })}
         >
           Hey, I'm TJ.
         </motion.h1>
@@ -159,7 +185,7 @@ export default function Hero() {
         <motion.div
           className="flex flex-col items-center gap-1.5 font-sans"
           initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={revealed ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ delay: 0.7, duration: 0.9, ease: "easeOut" }}
         >
           <span className="text-sm tracking-wide" style={{ color: "rgba(232,232,232,0.45)" }}>
@@ -187,7 +213,7 @@ export default function Hero() {
       <motion.div
         className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20 flex flex-col items-center gap-3"
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        animate={{ opacity: revealed ? 1 : 0 }}
         transition={{ delay: 1.4, duration: 1 }}
       >
         <span className="text-dim text-[10px] tracking-[0.3em] uppercase font-sans">
