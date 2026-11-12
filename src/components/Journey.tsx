@@ -265,6 +265,9 @@ export default function Journey() {
       ref={sectionRef}
       aria-label="My journey so far"
       className="pointer-events-none relative z-20"
+      // The loading screen waits for the ball's shader and the polaroids (see loader/readiness.ts)
+      data-preload="images"
+      data-preload-waiting={geo ? undefined : ""}
       style={{ marginTop: -START, marginBottom: -bottomOverlap, height: sectionHeight ?? "250vh" }}
     >
       <div className={`${reduce ? "relative h-full" : "sticky top-0 h-[100svh]"} overflow-hidden`}>
@@ -335,7 +338,7 @@ export default function Journey() {
                   />
                 )}
                 {/* isolate + mask keeps the WebGL canvas clipped to a circle in Safari too */}
-                <div className="relative size-full overflow-hidden rounded-full isolate [mask-image:radial-gradient(white,black)]">
+                <div className="relative size-full overflow-hidden rounded-full isolate [mask-image:radial-gradient(white,black)]" data-preload="canvas">
                   <ShaderGradientCanvas
                     style={{ width: "100%", height: "100%" }}
                     lazyLoad={false}
@@ -544,7 +547,7 @@ function Milestone({
           <p className="mt-0.5 font-sans text-sm text-dim">{marker.period}</p>
           {marker.current && (
             <p className="mt-3 font-sans text-[10px] uppercase tracking-[0.25em]" style={{ color: tint }}>
-              You are here
+              Present Day
             </p>
           )}
         </motion.div>
@@ -575,7 +578,8 @@ function Polaroid({ photo, size }: { photo: Photo; size: number }) {
       style={{ width: size, padding: size * 0.05, paddingBottom: size * 0.18 }}
     >
       <div className="relative aspect-square w-full overflow-hidden bg-surface">
-        <Image src={photo.src} alt={photo.alt} fill sizes={`${Math.round(size)}px`} className="object-cover" />
+        {/* eager: the loading screen waits for these, and lazy ones would only load on scroll */}
+        <Image src={photo.src} alt={photo.alt} fill sizes={`${Math.round(size)}px`} loading="eager" className="object-cover" />
       </div>
     </div>
   );

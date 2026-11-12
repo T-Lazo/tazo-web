@@ -221,7 +221,7 @@ export const journey: JourneyGroup[] = [
     label: "Year 3",
     title: "University of Limerick",
     detail: "Back at UL",
-    period: "Sep 2026 –",
+    period: "Sep 2026 – May 2027",
     current: true,
     stops: [],
   },
