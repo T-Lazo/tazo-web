@@ -2,8 +2,9 @@
 
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
+  animate,
   AnimatePresence,
   motion,
   useMotionValue,
@@ -14,6 +15,7 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
+import { useLenis } from "lenis/react";
 import JourneyPills from "@/components/JourneyPills";
 import JourneyTitle from "@/components/JourneyTitle";
 import { flattenJourney, journey, journeyConfig, type Marker, type Photo } from "@/data/journey";
@@ -31,7 +33,7 @@ const markers = flattenJourney(journey);
 const found = markers.findIndex((m) => m.current);
 const endIndex = found === -1 ? markers.length - 1 : found;
 
-const { ball, camera, photos: photoConfig } = journeyConfig;
+const { ball, camera, photos: photoConfig, arrival, magnet } = journeyConfig;
 const tint = journeyConfig.accent;
 
 // The ball starts this far below the top of the journey's frame. The frame overlaps the hero
@@ -146,6 +148,15 @@ export default function Journey() {
   const reduce = useReducedMotion() ?? false;
   const reduced = useMotionValue(reduce);
   useEffect(() => reduced.set(reduce), [reduced, reduce]);
+  const lenis = useLenis();
+
+  // Landing bump: the ball swells a little and settles when it arrives at a milestone
+  const bump = useMotionValue(1);
+  const onArrive = useCallback(() => {
+    if (!arrival.bump) return;
+    const b = arrival.bump;
+    animate(bump, [1, 1 + b, 1 - b * 0.3, 1], { duration: 0.7, times: [0, 0.22, 0.6, 1], ease: "easeOut" });
+  }, [bump]);
 
   const [geo, setGeo] = useState<Geometry | null>(null);
   const [version, setVersion] = useState(0);
@@ -224,6 +235,78 @@ export default function Journey() {
     window.addEventListener("resize", measure);
     return () => window.removeEventListener("resize", measure);
   }, [geoMV, sectionTop, vh]);
+
+  // ── Magnetic milestones ─────────────────────────────────────────────────────
+  // Each milestone is reached at an exact scroll position: the end of its slice of scrolling
+  // (see roadAt). Once the page has come to a stop close to one, ease the rest of the way.
+  // (Not Lenis's snap add-on: it decides from the wheel input while Lenis is still gliding, so
+  // it guesses the resting point wrong, and it ignores touch scrolling entirely.)
+  useEffect(() => {
+    if (!lenis || !geo || reduce || !magnet.enabled) return;
+    const seg = journeyConfig.segmentScroll * geo.vh;
+    const range = seg * magnet.range;
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    let pulling = false;
+    let touching = false;
+
+    const pull = () => {
+      if (touching || pulling || lenis.isStopped) return;
+      // Same formula as `travelled` above, solved for the scroll position (read fresh: the
+      // section and screen height can change without the road being rebuilt)
+      const base = sectionTop.get() + START - vh.get() / 2;
+      const y = lenis.scroll;
+      let best = 0;
+      let bestDist = Infinity;
+      for (let k = 0; k <= endIndex; k++) {
+        const target = base + seg * (k + 1);
+        const d = Math.abs(target - y);
+        if (d < bestDist) [best, bestDist] = [target, d];
+      }
+      if (bestDist > range || bestDist < 0.5) return;
+      pulling = true;
+      lenis.scrollTo(best, {
+        duration: magnet.duration,
+        easing: (t) => 1 - Math.pow(1 - t, 3),
+        onComplete: () => (pulling = false),
+      });
+    };
+    const wait = () => {
+      clearTimeout(timer);
+      timer = setTimeout(pull, magnet.delay);
+    };
+    // Every frame of movement restarts the wait, so it only fires once the page is still
+    const onScroll = () => {
+      if (!pulling) wait();
+    };
+    // Any input from the visitor wins: drop a pull in progress and wait for them to stop again
+    const onInput = () => {
+      pulling = false;
+      clearTimeout(timer);
+    };
+    // Never pull while a finger is on the screen
+    const onTouchStart = () => {
+      touching = true;
+      clearTimeout(timer);
+    };
+    const onTouchEnd = () => {
+      touching = false;
+      wait();
+    };
+
+    const offScroll = lenis.on("scroll", onScroll);
+    const offInput = lenis.on("virtual-scroll", onInput);
+    window.addEventListener("touchstart", onTouchStart, { passive: true });
+    window.addEventListener("touchend", onTouchEnd, { passive: true });
+    window.addEventListener("touchcancel", onTouchEnd, { passive: true });
+    return () => {
+      clearTimeout(timer);
+      offScroll();
+      offInput();
+      window.removeEventListener("touchstart", onTouchStart);
+      window.removeEventListener("touchend", onTouchEnd);
+      window.removeEventListener("touchcancel", onTouchEnd);
+    };
+  }, [lenis, geo, reduce, sectionTop, vh]);
 
   // ── Discrete states (React skips no-op updates) ─────────────────────────────
   const [atStart, setAtStart] = useState(true);
@@ -314,6 +397,7 @@ export default function Journey() {
                 at={geo.at[i]}
                 along={along}
                 reduce={reduce}
+                onArrive={onArrive}
               />
             ))}
 
@@ -321,7 +405,7 @@ export default function Journey() {
             <motion.div aria-hidden className="absolute left-0 top-0 z-10" style={{ x: ballX, y: ballY }}>
               <motion.div
                 className="absolute -translate-x-1/2 -translate-y-1/2"
-                style={{ width: size, height: size }}
+                style={{ width: size, height: size, scale: bump }}
                 animate={atStart && !reduce ? { y: [0, 5, 0] } : { y: 0 }}
                 transition={atStart && !reduce ? { duration: 2.4, repeat: Infinity, ease: "easeInOut" } : { duration: 0.4 }}
               >
@@ -432,6 +516,7 @@ function Milestone({
   at,
   along,
   reduce,
+  onArrive,
 }: {
   marker: Marker;
   geo: Geometry;
@@ -439,6 +524,7 @@ function Milestone({
   at: number;
   along: MotionValue<number>;
   reduce: boolean;
+  onArrive: () => void;
 }) {
   // 0 → 1 as the ball approaches this marker
   const p = useTransform(along, [at - 260, at], [0, 1]);
@@ -446,12 +532,22 @@ function Milestone({
   const detailOpacity = useTransform(p, [0.35, 1], [0, 1]);
   const detailY = useTransform(p, [0.35, 1], [12, 0]);
 
-  // Ripple once when the ball arrives
+  // Splash when the ball lands here moving forward (not when scrolling back up through it)
   const [arrived, setArrived] = useState(false);
+  const [splash, setSplash] = useState(0); // bumped on each landing; remounts the splash
+  const prev = useRef<number | null>(null);
   // (deferred a frame: `along` can change while the parent is rendering)
   useMotionValueEvent(along, "change", (v) => {
     const next = v >= at - 1;
-    requestAnimationFrame(() => setArrived(next));
+    const landed = prev.current !== null && prev.current < at - 1 && next;
+    prev.current = v;
+    requestAnimationFrame(() => {
+      setArrived(next);
+      if (landed && !reduce && arrival.enabled) {
+        setSplash((n) => n + 1);
+        onArrive();
+      }
+    });
   });
 
   const isYear = marker.kind === "year";
@@ -489,7 +585,7 @@ function Milestone({
       {photoConfig.layout === "carousel" ? (
         <PhotoCarousel photos={photos} size={photoSize} p={p} arrived={arrived} reduce={reduce} />
       ) : (
-        <PhotoStack photos={photos} size={photoSize} p={p} arrived={arrived} away={geo.mobile || left ? 1 : -1} />
+        <PhotoStack photos={photos} size={photoSize} p={p} away={geo.mobile || left ? 1 : -1} />
       )}
     </div>
   );
@@ -513,15 +609,8 @@ function Milestone({
       >
         <motion.span className="absolute -inset-px rounded-full" style={{ background: tint, opacity: p }} />
       </span>
-      {arrived && (
-        <motion.span
-          aria-hidden
-          className="absolute rounded-full border"
-          style={{ left: point.x, top: point.y, width: nodeSize, height: nodeSize, borderColor: tint, x: "-50%", y: "-50%" }}
-          initial={{ scale: 1, opacity: 0.8 }}
-          animate={{ scale: 4.5, opacity: 0 }}
-          transition={{ duration: 0.9, ease: "easeOut" }}
-        />
+      {splash > 0 && (
+        <Splash key={splash} x={point.x} y={point.y} ringSize={geo.mobile ? arrival.mobileRingSize : arrival.ringSize} />
       )}
 
       {/* Text beside it */}
@@ -557,6 +646,57 @@ function Milestone({
   );
 }
 
+// ── Landing splash ────────────────────────────────────────────────────────────
+
+const SPLASH_EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
+
+// Gold rings spreading out one after another, over a glow that blooms and fades: a drop
+// landing in a puddle. Plays once on mount (the milestone remounts it for each landing).
+function Splash({ x, y, ringSize }: { x: number; y: number; ringSize: number }) {
+  const { rings, glow } = arrival;
+  const centred = { left: x, top: y, x: "-50%", y: "-50%" };
+  return (
+    <>
+      {glow && (
+        <motion.span
+          aria-hidden
+          className="pointer-events-none absolute rounded-full"
+          style={{
+            ...centred,
+            width: ringSize * 1.3,
+            height: ringSize * 1.3,
+            background: `radial-gradient(circle, ${tint}59 0%, ${tint}1f 38%, ${tint}00 70%)`,
+          }}
+          initial={{ scale: 0.25, opacity: 0 }}
+          animate={{ scale: [0.25, 0.9, 1.1], opacity: [0, 1, 0] }}
+          transition={{ duration: 1.5, times: [0, 0.22, 1], ease: "easeOut" }}
+        />
+      )}
+      {Array.from({ length: rings }, (_, i) => (
+        <motion.span
+          key={i}
+          aria-hidden
+          className="pointer-events-none absolute rounded-full"
+          style={{
+            ...centred,
+            width: ringSize,
+            height: ringSize,
+            // Later rings are fainter and thinner, like ripples losing energy
+            border: `${Math.max(0.75, 1.6 - i * 0.35)}px solid ${tint}`,
+          }}
+          initial={{ scale: 0.05, opacity: 0 }}
+          animate={{ scale: 1, opacity: [0, 0.9 - i * 0.22, 0] }}
+          transition={{
+            delay: i * 0.13,
+            scale: { duration: 1.25 + i * 0.15, ease: SPLASH_EASE },
+            opacity: { duration: 1.25 + i * 0.15, times: [0, 0.12, 1], ease: "easeOut" },
+          }}
+        />
+      ))}
+    </>
+  );
+}
+
 // ── Polaroids ─────────────────────────────────────────────────────────────────
 
 // Cluster size in multiples of the polaroid width (room for the fanned-out cards)
@@ -585,10 +725,19 @@ function Polaroid({ photo, size }: { photo: Photo; size: number }) {
   );
 }
 
-// Gold-tinted and faint before the ball arrives, full colour when it does
-function usePhotoLook(p: MotionValue<number>) {
-  const opacity = useTransform(p, [0, 1], [0.35, 1]);
-  const filter = useTransform(p, (v) => `grayscale(${(1 - v) * 0.9}) sepia(${(1 - v) * 0.6})`);
+// Gold-tinted and faint before the ball arrives, full colour when it does. `lift` (0 → 1)
+// brings them to full colour regardless, e.g. while the stack is spread open by hover.
+function usePhotoLook(p: MotionValue<number>, lift?: MotionValue<number>) {
+  // (clamped: the hover spring overshoots past 1, and a negative grayscale() is invalid)
+  const l = () => clamp(lift?.get() ?? 0, 0, 1);
+  const opacity = useTransform(() => {
+    const base = 0.35 + 0.65 * p.get();
+    return base + (1 - base) * l();
+  });
+  const filter = useTransform(() => {
+    const k = (1 - p.get()) * (1 - l());
+    return `grayscale(${k * 0.9}) sepia(${k * 0.6})`;
+  });
   return { opacity, filter };
 }
 
@@ -596,28 +745,33 @@ function PhotoStack({
   photos,
   size,
   p,
-  arrived,
   away,
 }: {
   photos: Photo[];
   size: number;
   p: MotionValue<number>;
-  arrived: boolean;
   away: 1 | -1; // which side is away from the road, so the spread never covers the ball
 }) {
-  const look = usePhotoLook(p);
   const shown = photos.slice(0, Math.min(photoConfig.maxStack, FAN.length));
 
-  // Hover (or tap on touch screens) spreads the cards so each photo can be seen.
-  // Only once the ball has arrived, so the faint pile doesn't react while scrolling past.
+  // Hover (or tap on touch screens) spreads the cards so each photo can be seen. Available once
+  // the ball is near (photos.openFrom), so the faint pile far ahead doesn't react while
+  // scrolling past, but stopping just short of a milestone still works.
+  const [near, setNear] = useState(() => p.get() >= photoConfig.openFrom);
+  useMotionValueEvent(p, "change", (v) => {
+    const next = v >= photoConfig.openFrom;
+    requestAnimationFrame(() => setNear(next));
+  });
   const [spread, setSpread] = useState(false);
-  const open = spread && arrived;
+  const open = spread && near;
   const amount = useSpring(0, { stiffness: 260, damping: 26 });
   useEffect(() => amount.set(open ? 1 : 0), [amount, open]);
+  // Spread open early = full colour, so the photos can actually be seen
+  const look = usePhotoLook(p, amount);
 
   return (
     <motion.div
-      className={`absolute inset-0 ${arrived ? "pointer-events-auto" : ""}`}
+      className={`absolute inset-0 ${near ? "pointer-events-auto" : ""}`}
       style={{ ...look, zIndex: open ? 20 : undefined }}
       onHoverStart={() => setSpread(true)}
       onHoverEnd={() => setSpread(false)}
