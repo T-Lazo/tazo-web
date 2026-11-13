@@ -1,17 +1,18 @@
 import { Github, Linkedin, Mail, ArrowUpRight } from "lucide-react";
+import { site } from "@/data/site";
 
 const socials = [
   {
     icon: Linkedin,
     label: "LinkedIn",
     handle: "timothy-josh-lazo",
-    href: "https://www.linkedin.com/in/timothy-josh-lazo-11435434b/",
+    href: site.profiles.linkedin,
   },
   {
     icon: Github,
     label: "GitHub",
     handle: "@T-Lazo",
-    href: "https://github.com/T-Lazo",
+    href: site.profiles.github,
   },
   {
     icon: Mail,
