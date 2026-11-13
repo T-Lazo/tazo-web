@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
 import SmoothScroll from "@/components/SmoothScroll";
 import Loader from "@/components/loader/Loader";
 
@@ -38,6 +39,7 @@ export default function RootLayout({
         <SmoothScroll>
           <Loader>{children}</Loader>
         </SmoothScroll>
+        <Analytics />
       </body>
     </html>
   );
