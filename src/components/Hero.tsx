@@ -157,20 +157,21 @@ export default function Hero() {
         initial="hidden"
         animate={revealed ? "show" : "hidden"}
       >
-        <motion.span
-          className="block text-dim text-xs tracking-[0.25em] uppercase mb-8 font-sans"
-          variants={fadeUp}
-        >
-          <a
-            href="https://software-engineering.ie"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:text-white transition-colors duration-200"
-          >
-            ISE Student
-          </a>
-          {" · University of Limerick"}
-        </motion.span>
+        {/* The negative margin cancels the gap letter-spacing leaves after the last letter,
+            which would otherwise pull the line slightly off-centre */}
+        <motion.div className="mb-8 font-sans text-xs uppercase" variants={fadeUp}>
+          <span className="text-dim tracking-[0.25em] mr-[-0.25em]">
+            <a
+              href="https://software-engineering.ie"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-white transition-colors duration-200"
+            >
+              ISE Student
+            </a>
+            {" · University of Limerick"}
+          </span>
+        </motion.div>
 
         <motion.h1
           data-loader-headline
