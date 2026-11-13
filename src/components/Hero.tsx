@@ -180,7 +180,7 @@ export default function Hero() {
             ? { variants: undefined, ...handoffMotion(holdHeadline, headlineGlide) }
             : { variants: fadeUp })}
         >
-          Hey, I'm TJ.
+          Hey, I&apos;m TJ.
         </motion.h1>
 
         <motion.div

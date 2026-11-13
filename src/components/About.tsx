@@ -81,7 +81,7 @@ export default function About() {
 
       {/* Skills */}
       <div>
-        <p className="text-xs tracking-[0.2em] uppercase text-accent font-sans mb-5">Tools I've Worked With</p>
+        <p className="text-xs tracking-[0.2em] uppercase text-accent font-sans mb-5">Tools I&apos;ve Worked With</p>
         <div className="flex flex-wrap gap-2">
           {skills.map((skill) => (
             <span
